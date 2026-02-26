@@ -1,0 +1,25 @@
+# Build results
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+
+# Rider / VSCode
+.idea/
+.vscode/
+
+# Logs
+**/logs/
+**/*.log
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.*
+
+# OS
+.DS_Store
+Thumbs.db
