@@ -39,10 +39,12 @@ CREATE TABLE dbo.MappingVersions(
   Name NVARCHAR(200) NOT NULL,
   CreatedByUserId NVARCHAR(100) NOT NULL,
   CreatedAtUtc DATETIME2 NOT NULL,
+  IsActive BIT NOT NULL CONSTRAINT DF_MappingVersions_IsActive DEFAULT(0),
   IsArchived BIT NOT NULL CONSTRAINT DF_MappingVersions_IsArchived DEFAULT(0),
   CONSTRAINT FK_MappingVersions_DataStreams FOREIGN KEY(StreamId) REFERENCES dbo.DataStreams(Id)
 );
 CREATE UNIQUE INDEX UX_MappingVersions_Stream_Version ON dbo.MappingVersions(StreamId, VersionNumber);
+CREATE INDEX IX_MappingVersions_Stream_IsActive ON dbo.MappingVersions(StreamId, IsActive);
 
 CREATE TABLE dbo.MappingRules(
   Id UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_MappingRules PRIMARY KEY,

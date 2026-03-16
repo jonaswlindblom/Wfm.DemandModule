@@ -41,6 +41,7 @@ public sealed class DemandDbContext : DbContext
         b.Entity<StreamEvent>().HasIndex(x => new { x.StreamId, x.OccurredAtUtc });
 
         b.Entity<MappingVersion>().HasIndex(x => new { x.StreamId, x.VersionNumber }).IsUnique();
+        b.Entity<MappingVersion>().HasIndex(x => new { x.StreamId, x.IsActive });
 
         b.Entity<WorkloadBucket>().HasIndex(x => new { x.SimulationRunId, x.ActivityId, x.IntervalStartUtc });
 

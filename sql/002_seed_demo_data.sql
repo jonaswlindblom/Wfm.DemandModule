@@ -13,8 +13,8 @@ INSERT INTO dbo.DataStreams(Id, Name, SourceSystem, Industry, CreatedAtUtc)
 VALUES (@StreamCamping, 'Demo Camping Booking', 'PMS', 'camping', SYSUTCDATETIME());
 
 DECLARE @Mv UNIQUEIDENTIFIER = NEWID();
-INSERT INTO dbo.MappingVersions(Id, StreamId, VersionNumber, Name, CreatedByUserId, CreatedAtUtc, IsArchived)
-VALUES (@Mv, @StreamCamping, 1, 'Initial camping mapping', 'seed', SYSUTCDATETIME(), 0);
+INSERT INTO dbo.MappingVersions(Id, StreamId, VersionNumber, Name, CreatedByUserId, CreatedAtUtc, IsActive, IsArchived)
+VALUES (@Mv, @StreamCamping, 1, 'Initial camping mapping', 'seed', SYSUTCDATETIME(), 1, 0);
 
 DECLARE @Rule UNIQUEIDENTIFIER = NEWID();
 INSERT INTO dbo.MappingRules(Id, MappingVersionId, EventType, ConditionExpression, Name, SortOrder)

@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,10 +29,20 @@ builder.Services.AddControllers()
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("SpaDev", p =>
-        p.WithOrigins("http://localhost:5173")
-         .AllowAnyHeader()
-         .AllowAnyMethod()
-         .AllowCredentials());
+        p.SetIsOriginAllowed(origin =>
+        {
+            if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+            {
+                return false;
+            }
+
+            return (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+                && (uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase)
+                    || uri.Host.Equals("127.0.0.1"));
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
 });
 
 builder.Services.AddDbContext<DemandDbContext>(opt =>
@@ -118,7 +128,7 @@ if (app.Environment.IsDevelopment())
 app.UseDefaultFiles();   // letar index.html i wwwroot
 app.UseStaticFiles();    // serverar css/js/assets
 
-// SPA fallback: allt som inte matchar /api ska g� till index.html
+// SPA fallback: allt som inte matchar /api ska gå till index.html
 app.MapFallbackToFile("index.html");
 
 app.UseAuthentication();
@@ -130,3 +140,4 @@ app.Run();
 
 // For WebApplicationFactory in tests
 public partial class Program { }
+

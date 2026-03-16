@@ -3,6 +3,7 @@ export type Stream = {
   name: string;
   sourceSystem: string;
   industry: string;
+  createdAtUtc?: string;
 };
 
 export type Activity = {
@@ -18,6 +19,9 @@ export type MappingVersion = {
   versionNumber: number;
   name: string;
   createdAtUtc: string;
+  createdByUserId?: string;
+  isActive?: boolean;
+  isArchived?: boolean;
 };
 
 export type MappingRule = {
@@ -45,7 +49,93 @@ export type LatestMappingResponse = {
   ruleActivities: MappingRuleActivity[];
 };
 
+export type MappingVersionsResponse = {
+  versions: MappingVersion[];
+};
+
+export type CreateMappingRequest = {
+  name: string;
+  rules: Array<{
+    name: string;
+    eventType: string;
+    conditionExpression?: string | null;
+    sortOrder: number;
+    activities: Array<{
+      activityId: string;
+      baseHours: number;
+      unitExpression?: string | null;
+      perUnitHours: number;
+      multiplierExpression?: string | null;
+    }>;
+  }>;
+};
+
+export type MappingVersionResponse = {
+  mappingVersion: MappingVersion;
+};
+
 export type SimulationCreateResponse = { simulationId: string };
+
+export type SimulationRunTimeSeriesPoint = {
+  intervalStartUtc: string;
+  hours: number;
+};
+
+export type SimulationRunActivitySeries = {
+  activityCode: string;
+  points: SimulationRunTimeSeriesPoint[];
+};
+
+export type SimulationRunActivityTotal = {
+  activityCode: string;
+  totalHours: number;
+};
+
+export type SimulationRunSummary = {
+  totalHours: number;
+  peakIntervalStartUtc: string | null;
+  peakIntervalHours: number;
+  activityCount: number;
+  primaryDriver: string;
+};
+
+export type SimulationRunResponse = {
+  from: string;
+  to: string;
+  intervalMinutes: number;
+  series: SimulationRunActivitySeries[];
+  totals: SimulationRunActivityTotal[];
+  summary: SimulationRunSummary;
+};
+
+export type FeedbackEntry = {
+  id: string;
+  mappingVersionId: string;
+  mappingVersionName: string;
+  ruleActivityId: string;
+  activityName: string;
+  intervalStartUtc: string;
+  actualHours: number;
+  comment?: string | null;
+  createdByUserId: string;
+  createdAtUtc: string;
+};
+
+export type CalibrationProfile = {
+  id: string;
+  mappingVersionId: string;
+  mappingVersionName: string;
+  ruleActivityId: string;
+  activityName: string;
+  factor: number;
+  lambda: number;
+  updatedAtUtc: string;
+};
+
+export type FeedbackResponse = {
+  entries: FeedbackEntry[];
+  profiles: CalibrationProfile[];
+};
 
 export type WorkloadBucket = {
   id: string;
