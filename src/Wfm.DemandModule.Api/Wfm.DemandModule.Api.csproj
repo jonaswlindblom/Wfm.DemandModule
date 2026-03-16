@@ -9,6 +9,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+    <PackageReference Include="Node.js" Version="5.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
@@ -20,4 +21,10 @@
     <ProjectReference Include="..\Wfm.DemandModule.Domain\Wfm.DemandModule.Domain.csproj" />
     <ProjectReference Include="..\Wfm.DemandModule.Infrastructure\Wfm.DemandModule.Infrastructure.csproj" />
   </ItemGroup>
+	<Target Name="BuildFrontend" BeforeTargets="Publish">
+		<Message Text="Building frontend (npm ci + npm run build)..." Importance="high" />
+		<Exec WorkingDirectory="..\..\frontend" Command="npm ci" />
+		<Exec WorkingDirectory="..\..\frontend" Command="npm run build" />
+	</Target>
+	
 </Project>

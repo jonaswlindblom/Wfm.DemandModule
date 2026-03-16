@@ -26,6 +26,15 @@ builder.Services.AddControllers()
         o.InvalidModelStateResponseFactory = ctx => new BadRequestObjectResult(ctx.ModelState);
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SpaDev", p =>
+        p.WithOrigins("http://localhost:5173")
+         .AllowAnyHeader()
+         .AllowAnyMethod()
+         .AllowCredentials());
+});
+
 builder.Services.AddDbContext<DemandDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DemandDb")));
 
@@ -100,6 +109,17 @@ app.UseSerilogRequestLogging();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("SpaDev");
+}
+
+app.UseDefaultFiles();   // letar index.html i wwwroot
+app.UseStaticFiles();    // serverar css/js/assets
+
+// SPA fallback: allt som inte matchar /api ska gå till index.html
+app.MapFallbackToFile("index.html");
 
 app.UseAuthentication();
 app.UseAuthorization();
