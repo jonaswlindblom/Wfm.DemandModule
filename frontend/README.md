@@ -9,7 +9,9 @@
    npm install
    npm run dev
 
-Default URL: http://localhost:5173
+Default URL: https://localhost:5173
+
+Note: the Vite dev server runs with HTTPS enabled. Your browser may show a local certificate warning the first time; proceed to the site if prompted.
 
 ## Configure API base (optional)
 Create `.env.local`:

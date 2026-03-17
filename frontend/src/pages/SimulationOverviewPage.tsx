@@ -210,10 +210,11 @@ export default function SimulationOverviewPage() {
   const [period, setPeriod] = useState<Period>("day");
   const [viewMode, setViewMode] = useState<ViewMode>("curve");
   const [activeStreams, setActiveStreams] = useState<string[]>(["visitors"]);
+  const [selectedDate, setSelectedDate] = useState(DASHBOARD_DATE);
 
   const overviewQuery = useQuery({
-    queryKey: ["simulation-overview", DASHBOARD_DATE],
-    queryFn: () => getSimulationOverview(DASHBOARD_DATE),
+    queryKey: ["simulation-overview", selectedDate],
+    queryFn: () => getSimulationOverview(selectedDate),
   });
 
   const selectedPeriod = useMemo(() => {
@@ -239,12 +240,17 @@ export default function SimulationOverviewPage() {
   const currentSuggestions = mapped?.suggestions ?? [];
   const currentStripData = mapped?.strip ?? [];
   const currentKpis = mapped?.kpis ?? { total: "-", delta: "-" };
-  const rangeLabel = mapped?.rangeLabel ?? DASHBOARD_DATE;
+  const rangeLabel = mapped?.rangeLabel ?? selectedDate;
   const driver = mapped?.driver ?? "backend-data";
   const streams: StreamItem[] = (overviewQuery.data?.streams ?? []).map((stream) => ({
     ...stream,
     icon: streamIcons[stream.id] ?? FileCode,
   }));
+  const selectedDateLabel = new Date(`${selectedDate}T00:00:00`).toLocaleDateString("sv-SE", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 
   const toggleStream = (id: string) => {
     setActiveStreams((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
@@ -281,10 +287,17 @@ export default function SimulationOverviewPage() {
             })}
           </div>
           <div className="h-6 w-px bg-slate-200" />
-          <button className="flex items-center gap-2 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded py-1.5">
+          <label className="flex items-center gap-2 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded py-1.5 cursor-pointer">
             <CalendarIcon className="w-4 h-4 text-slate-500" />
-            <span>{rangeLabel}</span>
-          </button>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(event) => setSelectedDate(event.target.value)}
+              className="min-w-[9.5rem] bg-transparent text-sm font-medium text-slate-700 outline-none [color-scheme:light]"
+              aria-label="Välj datum för efterfrågeöversikten"
+            />
+            <span className="hidden xl:inline text-xs text-slate-400">{period === "day" ? selectedDateLabel : rangeLabel}</span>
+          </label>
         </div>
       </div>
 

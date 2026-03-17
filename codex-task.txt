@@ -1,5 +1,12 @@
 Work autonomously until the task is complete.
 
+You are an autonomous coding agent.
+
+Work continuously without asking questions.
+Do not stop for confirmation.
+Continue making decisions independently.
+Only stop when the goal is completed.
+
 Goal:
 I want my frontend to work against db and present data from SQL Server instead of mock data. I want to implement a realistic workload engine that simulates camping booking creation and see the results on the dashboard.
 Frontendens Mapping Editor ska kunna bli riktig, inte bara mockad
@@ -8,106 +15,4 @@ Tech stack:
 Frontend: React + TypeScript + Tailwind
 Backend: ASP.NET Core Web API
 Database: SQL Server 2019
-
-Steps:
-1. Analyze repository structure
-2. Implement backend endpoint GET /api/v1/simulation/overview
-3. Return realistic workload data
-4. Connect React dashboard to endpoint via React Query
-5. Replace frontend mock data
-6. Implement CampingBookingCreated workload engine
-7. Add unit tests
-8. Ensure frontend renders correctly
-
-Constraints:
-- Do not refactor unrelated code
-- Keep UI layout unchanged
-- Follow ASP.NET Core patterns
-- SQL Server 2019 compatible
-- Make small commits
-
-
-Implementera GET /api/v1/simulation/run för att simulera workload för ett datumintervall.
-
-Krav:
-- Input: from, to, intervalMinutes
-- Använd camping-engine för testdata
-- Returnera tidsserie per aktivitet
-- Returnera total workload per aktivitet
-- Returnera summary för dashboard
-- Lägg till minst 3 API-tester
-- Håll implementationen enkel och läsbar
-
-
-Skapa SQL Server 2019-kompatibla tabeller och scripts för följande entiteter:
-
-- StreamDefinition
-- StreamEvent
-- WorkActivity
-- MappingVersion
-- MappingRule
-- WorkloadResult
-- AuditLog
-
-Krav:
-- Single-tenant, ingen tenantId
-- Lägg till lämpliga primary keys, foreign keys och index
-- Indexera för:
-  - workload per activity och interval
-  - events per interval
-  - mapping version lookup
-- Leverera T-SQL scripts
-- Lägg till kort motivering för varje index
-
-
-Implementera backend-stöd för Mapping Editor.
-
-Krav:
-- Hämta mapping-versioner
-- Hämta aktiv version
-- Skapa ny version
-- Aktivera vald version
-- Rollback till tidigare version
-- Audit-logga alla ändringar med vem, när och vad
-- API under /api/v1/mappings
-- Lägg till API-tester
-
-Koppla dashboardens summary cards, chart och suggestions till backend-endpoints.
-Behåll nuvarande design.
-Lägg till loading, empty och error state.
-
-Koppla Mapping Editor till /api/v1/mappings.
-Stöd:
-- visa versioner
-- redigera regler
-- skapa ny version
-- aktivera version
-- rollback
-
-Koppla Simulation-skärmen till /api/v1/simulation/run.
-Visa tidsserier per aktivitet, totals och jämförelse mellan baseline och AI-justerad variant.
-
-Implementera enkel auth + RBAC för rollerna:
-- Admin
-- Planner
-- Viewer
-
-Krav:
-- Skydda endpoints med policies
-- Viewer: read only
-- Planner: simulation + feedback + mapping edit
-- Admin: full access inklusive rollback och administration
-- Lägg till tester för åtkomstregler
-
-Lägg till strukturerad loggning och grundläggande observability.
-
-Krav:
-- Logga request id, endpoint, duration och status
-- Logga simulation runs och mapping changes
-- Logga drift-signal eller avvikande utfall om möjligt
-- Behåll AuditLog som separat affärslogg
-
-
-
-Stop when:
-Dashboard shows backend data and tests pass.
+MVC kan vara fin också
