@@ -39,6 +39,36 @@ public sealed class MappingsController : ControllerBase
         string? MultiplierExpression
     );
 
+    [HttpGet]
+    [Authorize(Policy = "ReadOnly")]
+    public async Task<ActionResult<object>> GetVersions(Guid streamId, CancellationToken ct)
+    {
+        var versions = await _db.MappingVersions.AsNoTracking()
+            .Where(x => x.StreamId == streamId)
+            .OrderByDescending(x => x.VersionNumber)
+            .ToListAsync(ct);
+
+        return Ok(new { versions });
+    }
+
+    [HttpGet("active")]
+    [Authorize(Policy = "ReadOnly")]
+    public async Task<ActionResult<object>> GetActive(Guid streamId, CancellationToken ct)
+    {
+        var active = await _db.MappingVersions.AsNoTracking()
+            .Where(x => x.StreamId == streamId && x.IsActive && !x.IsArchived)
+            .OrderByDescending(x => x.VersionNumber)
+            .FirstOrDefaultAsync(ct);
+
+        if (active is null) return NotFound();
+
+        var rules = await _db.MappingRules.AsNoTracking().Where(r => r.MappingVersionId == active.Id).ToListAsync(ct);
+        var ruleIds = rules.Select(r => r.Id).ToList();
+        var ras = await _db.MappingRuleActivities.AsNoTracking().Where(a => ruleIds.Contains(a.MappingRuleId)).ToListAsync(ct);
+
+        return Ok(new { version = active, rules, ruleActivities = ras });
+    }
+
     [HttpGet("latest")]
     [Authorize(Policy = "ReadOnly")]
     public async Task<ActionResult<object>> GetLatest(Guid streamId, CancellationToken ct)
@@ -75,6 +105,7 @@ public sealed class MappingsController : ControllerBase
             Name = req.Name,
             CreatedByUserId = UserId(),
             CreatedAtUtc = DateTime.UtcNow,
+            IsActive = !await _db.MappingVersions.AnyAsync(x => x.StreamId == streamId && x.IsActive && !x.IsArchived, ct),
             IsArchived = false
         };
 
@@ -127,6 +158,30 @@ public sealed class MappingsController : ControllerBase
         return Ok(new { mappingVersion = mv });
     }
 
+    [HttpPost("{versionId:guid}/activate")]
+    [Authorize(Policy = "PlannerOrAdmin")]
+    public async Task<ActionResult<object>> Activate(Guid streamId, Guid versionId, CancellationToken ct)
+    {
+        var versions = await _db.MappingVersions
+            .Where(x => x.StreamId == streamId && !x.IsArchived)
+            .ToListAsync(ct);
+
+        var target = versions.FirstOrDefault(x => x.Id == versionId);
+        if (target is null) return NotFound();
+
+        foreach (var version in versions)
+        {
+            version.IsActive = version.Id == target.Id;
+        }
+
+        await _db.SaveChangesAsync(ct);
+
+        await _audit.WriteAsync(UserId(), Role(), "MappingActivated", "MappingVersion", target.Id.ToString(),
+            new { target.VersionNumber, target.Name }, ct);
+
+        return Ok(new { mappingVersion = target });
+    }
+
     [HttpPost("{versionId:guid}/rollback")]
     [Authorize(Policy = "PlannerOrAdmin")]
     public async Task<ActionResult<object>> Rollback(Guid streamId, Guid versionId, CancellationToken ct)
@@ -147,8 +202,15 @@ public sealed class MappingsController : ControllerBase
             VersionNumber = nextVersion,
             Name = $"Rollback to v{target.VersionNumber}: {target.Name}",
             CreatedByUserId = UserId(),
-            CreatedAtUtc = DateTime.UtcNow
+            CreatedAtUtc = DateTime.UtcNow,
+            IsActive = true
         };
+
+        var currentVersions = await _db.MappingVersions.Where(x => x.StreamId == streamId && x.IsActive).ToListAsync(ct);
+        foreach (var version in currentVersions)
+        {
+            version.IsActive = false;
+        }
 
         _db.MappingVersions.Add(mv);
 

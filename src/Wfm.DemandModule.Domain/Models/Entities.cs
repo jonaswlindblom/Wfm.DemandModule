@@ -36,6 +36,7 @@ public sealed class MappingVersion
     public string Name { get; set; } = "";
     public string CreatedByUserId { get; set; } = "";
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+    public bool IsActive { get; set; }
     public bool IsArchived { get; set; }
 }
 

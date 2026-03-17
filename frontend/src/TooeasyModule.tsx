@@ -1,5 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import SimulationOverviewPage from './pages/SimulationOverviewPage';
+import MappingEditorPage from './pages/MappingEditorPage';
+import SimulationPage from './pages/SimulationPage';
+import FeedbackPage from './pages/FeedbackPage';
 import {
     // Navigering & Struktur
     LayoutDashboard,
@@ -822,16 +825,16 @@ export default function TooeasyModule() {
 
     const renderScreen = () => {
         switch (activeTab) {
-            case 'rules': return <ScreenRuleBuilder />;
-            case 'monitor': return <ScreenMonitor />;
+            case 'rules': return <MappingEditorPage />;
+            case 'monitor': return <SimulationPage />;
             case 'overview': return <SimulationOverviewPage />;
-            case 'feedback': return <ScreenFeedback />;
+            case 'feedback': return <FeedbackPage />;
             default: return <SimulationOverviewPage />;
         }
     };
 
     return (
-        <div className="w-full h-screen bg-slate-50/50 flex flex-col font-sans text-slate-900">
+        <div className="w-full h-full bg-slate-50/50 flex flex-col font-sans text-slate-900">
 
             {/* MODULE NAVIGATION (Simulerar Interna Flikar) */}
             <div className="bg-white border-b border-slate-200 px-6 pt-4">

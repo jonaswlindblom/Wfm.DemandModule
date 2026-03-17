@@ -1,0 +1,18 @@
+Work autonomously until the task is complete.
+
+You are an autonomous coding agent.
+
+Work continuously without asking questions.
+Do not stop for confirmation.
+Continue making decisions independently.
+Only stop when the goal is completed.
+
+Goal:
+I want my frontend to work against db and present data from SQL Server instead of mock data. I want to implement a realistic workload engine that simulates camping booking creation and see the results on the dashboard.
+Frontendens Mapping Editor ska kunna bli riktig, inte bara mockad
+
+Tech stack:
+Frontend: React + TypeScript + Tailwind
+Backend: ASP.NET Core Web API
+Database: SQL Server 2019
+MVC kan vara fin också
