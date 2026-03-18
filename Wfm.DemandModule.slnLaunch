@@ -9,14 +9,14 @@
     ]
   },
   {
-    "Name": "API + Frontend UI",
+    "Name": "API + Frontend Launcher",
     "Projects": [
       {
         "Path": "src\\Wfm.DemandModule.Api\\Wfm.DemandModule.Api.csproj",
         "Action": "Start"
       },
       {
-        "Path": "frontend.ui\\frontend.ui.esproj",
+        "Path": "src\\Wfm.DemandModule.FrontendLauncher\\Wfm.DemandModule.FrontendLauncher.csproj",
         "Action": "StartWithoutDebugging"
       }
     ]
