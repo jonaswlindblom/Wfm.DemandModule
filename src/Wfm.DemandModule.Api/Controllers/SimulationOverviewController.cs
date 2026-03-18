@@ -74,12 +74,17 @@ public sealed class SimulationOverviewController : ControllerBase
             selectedDate.ToString("yyyy-MM-dd"));
 
     private static OverviewPeriod BuildWeekPeriod(DateOnly selectedDate)
-        => BuildPeriod(
+    {
+        var weekStart = StartOfWeek(selectedDate, DayOfWeek.Monday);
+        var weekEndExclusive = weekStart.AddDays(7);
+
+        return BuildPeriod(
             "week",
-            selectedDate.AddDays(-3).ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
-            selectedDate.AddDays(4).ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
+            weekStart.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
+            weekEndExclusive.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
             1440,
-            $"{selectedDate.AddDays(-3):yyyy-MM-dd} till {selectedDate.AddDays(3):yyyy-MM-dd}");
+            $"{weekStart:yyyy-MM-dd} till {weekStart.AddDays(6):yyyy-MM-dd}");
+    }
 
     private static OverviewPeriod BuildMonthPeriod(DateOnly selectedDate)
     {
@@ -183,6 +188,12 @@ public sealed class SimulationOverviewController : ControllerBase
         => totalHours >= 5m ? "high" : totalHours >= 2m ? "medium" : "low";
 
     private static int DecimalToInt(decimal value) => (int)Math.Round(value, MidpointRounding.AwayFromZero);
+
+    private static DateOnly StartOfWeek(DateOnly date, DayOfWeek startOfWeek)
+    {
+        var diff = (7 + (date.DayOfWeek - startOfWeek)) % 7;
+        return date.AddDays(-diff);
+    }
 
     public sealed record SimulationOverviewResponse(DateTime GeneratedAtUtc, DateOnly Date, IReadOnlyList<OverviewStream> Streams, OverviewPeriods Periods);
     public sealed record OverviewPeriods(OverviewPeriod Day, OverviewPeriod Week, OverviewPeriod Month);

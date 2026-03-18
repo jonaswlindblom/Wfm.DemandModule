@@ -16,10 +16,10 @@
 **/*.log
 
 # Node
-frontend/node_modules/
-frontend/dist/
-frontend/.env.local
-frontend/.env.*
+frontend.UI/node_modules/
+frontend.UI/dist/
+frontend.UI/.env.local
+frontend.UI/.env.*
 
 # OS
 .DS_Store

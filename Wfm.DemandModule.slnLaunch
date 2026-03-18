@@ -1,0 +1,24 @@
+[
+  {
+    "Name": "API Only",
+    "Projects": [
+      {
+        "Path": "src\\Wfm.DemandModule.Api\\Wfm.DemandModule.Api.csproj",
+        "Action": "Start"
+      }
+    ]
+  },
+  {
+    "Name": "API + Frontend UI",
+    "Projects": [
+      {
+        "Path": "src\\Wfm.DemandModule.Api\\Wfm.DemandModule.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "frontend.ui\\frontend.ui.esproj",
+        "Action": "StartWithoutDebugging"
+      }
+    ]
+  }
+]

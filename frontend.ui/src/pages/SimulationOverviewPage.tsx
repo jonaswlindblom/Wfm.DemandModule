@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo, useState } from "react";
+import { type ReactNode, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   BarChart3,
@@ -161,6 +161,18 @@ function formatDelta(value: number) {
   return `${value >= 0 ? "+" : ""}${value.toLocaleString("sv-SE", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
 }
 
+function formatDatePickerLabel(selectedDate: string, period: Period, rangeLabel: string) {
+  if (period === "day") {
+    return new Date(`${selectedDate}T00:00:00`).toLocaleDateString("sv-SE", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  return rangeLabel;
+}
+
 function periodData(period: SimulationOverviewPeriod) {
   const chart: ChartPoint[] = period.chart.map((item) => ({
     label: item.label,
@@ -211,6 +223,7 @@ export default function SimulationOverviewPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("curve");
   const [activeStreams, setActiveStreams] = useState<string[]>(["visitors"]);
   const [selectedDate, setSelectedDate] = useState(DASHBOARD_DATE);
+  const dateInputRef = useRef<HTMLInputElement | null>(null);
 
   const overviewQuery = useQuery({
     queryKey: ["simulation-overview", selectedDate],
@@ -246,14 +259,25 @@ export default function SimulationOverviewPage() {
     ...stream,
     icon: streamIcons[stream.id] ?? FileCode,
   }));
-  const selectedDateLabel = new Date(`${selectedDate}T00:00:00`).toLocaleDateString("sv-SE", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  const datePickerLabel = formatDatePickerLabel(selectedDate, period, rangeLabel);
 
   const toggleStream = (id: string) => {
     setActiveStreams((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
+  };
+
+  const openDatePicker = () => {
+    const input = dateInputRef.current;
+    if (!input) {
+      return;
+    }
+
+    const picker = input as HTMLInputElement & { showPicker?: () => void };
+    if (picker.showPicker) {
+      picker.showPicker();
+      return;
+    }
+
+    input.click();
   };
 
   return (
@@ -287,17 +311,23 @@ export default function SimulationOverviewPage() {
             })}
           </div>
           <div className="h-6 w-px bg-slate-200" />
-          <label className="flex items-center gap-2 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded py-1.5 cursor-pointer">
+          <button
+            type="button"
+            onClick={openDatePicker}
+            className="flex items-center gap-2 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded py-1.5"
+          >
             <CalendarIcon className="w-4 h-4 text-slate-500" />
+            <span>{datePickerLabel}</span>
             <input
+              ref={dateInputRef}
               type="date"
               value={selectedDate}
               onChange={(event) => setSelectedDate(event.target.value)}
-              className="min-w-[9.5rem] bg-transparent text-sm font-medium text-slate-700 outline-none [color-scheme:light]"
+              className="sr-only"
+              tabIndex={-1}
               aria-label="Välj datum för efterfrågeöversikten"
             />
-            <span className="hidden xl:inline text-xs text-slate-400">{period === "day" ? selectedDateLabel : rangeLabel}</span>
-          </label>
+          </button>
         </div>
       </div>
 

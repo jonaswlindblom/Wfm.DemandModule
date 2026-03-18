@@ -23,8 +23,8 @@
   </ItemGroup>
 	<Target Name="BuildFrontend" BeforeTargets="Publish">
 		<Message Text="Building frontend (npm ci + npm run build)..." Importance="high" />
-		<Exec WorkingDirectory="..\..\frontend" Command="npm ci" />
-		<Exec WorkingDirectory="..\..\frontend" Command="npm run build" />
+		<Exec WorkingDirectory="..\..\frontend.UI" Command="npm ci" />
+		<Exec WorkingDirectory="..\..\frontend.UI" Command="npm run build" />
 	</Target>
 	
 </Project>

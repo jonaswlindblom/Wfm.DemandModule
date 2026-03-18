@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.4.11605.240 stable
+VisualStudioVersion = 18.4.11605.240
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wfm.DemandModule.Api", "src\Wfm.DemandModule.Api\Wfm.DemandModule.Api.csproj", "{1DECA490-1398-4E95-9B8C-6D4AE411959F}"
 EndProject
@@ -10,47 +10,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wfm.DemandModule.Infrastruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wfm.DemandModule.Tests", "tests\Wfm.DemandModule.Tests\Wfm.DemandModule.Tests.csproj", "{1F269512-541A-426D-B943-B42140343B39}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frontend", "frontend", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		frontend\index.html = frontend\index.html
-		frontend\package.json = frontend\package.json
-		frontend\postcss.config.cjs = frontend\postcss.config.cjs
-		frontend\tsconfig.json = frontend\tsconfig.json
-		frontend\tsconfig.node.json = frontend\tsconfig.node.json
-		frontend\vite.config.mjs = frontend\vite.config.mjs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0BC82695-936F-4686-9CCB-7D8F3C326C50}"
-	ProjectSection(SolutionItems) = preProject
-		frontend\src\App.tsx = frontend\src\App.tsx
-		frontend\src\index.css = frontend\src\index.css
-		frontend\src\main.tsx = frontend\src\main.tsx
-		frontend\src\TooeasyModule.tsx = frontend\src\TooeasyModule.tsx
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{D55B177F-A9F6-40A5-B6B2-7882243740EC}"
-	ProjectSection(SolutionItems) = preProject
-		frontend\src\api\client.ts = frontend\src\api\client.ts
-		frontend\src\api\types.ts = frontend\src\api\types.ts
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{FFB4D8B8-5C21-4488-85C7-B454F95B6C49}"
-	ProjectSection(SolutionItems) = preProject
-		frontend\src\components\TopBar.tsx = frontend\src\components\TopBar.tsx
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pages", "pages", "{C309CBCE-3429-4736-859D-E88AAD2EF81C}"
-	ProjectSection(SolutionItems) = preProject
-		frontend\src\pages\MappingEditorPage.tsx = frontend\src\pages\MappingEditorPage.tsx
-		frontend\src\pages\SimulationPage.tsx = frontend\src\pages\SimulationPage.tsx
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		AGENTS.md = AGENTS.md
 		codex-task.txt = codex-task.txt
 		fix-tailwind.patch = fix-tailwind.patch
 	EndProjectSection
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "frontend.ui", "frontend.ui\frontend.ui.esproj", "{1730FC97-F562-9803-0DFB-526373293762}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,15 +41,17 @@ Global
 		{1F269512-541A-426D-B943-B42140343B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F269512-541A-426D-B943-B42140343B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F269512-541A-426D-B943-B42140343B39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1730FC97-F562-9803-0DFB-526373293762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1730FC97-F562-9803-0DFB-526373293762}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1730FC97-F562-9803-0DFB-526373293762}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1730FC97-F562-9803-0DFB-526373293762}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1730FC97-F562-9803-0DFB-526373293762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1730FC97-F562-9803-0DFB-526373293762}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0BC82695-936F-4686-9CCB-7D8F3C326C50} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{D55B177F-A9F6-40A5-B6B2-7882243740EC} = {0BC82695-936F-4686-9CCB-7D8F3C326C50}
-		{FFB4D8B8-5C21-4488-85C7-B454F95B6C49} = {0BC82695-936F-4686-9CCB-7D8F3C326C50}
-		{C309CBCE-3429-4736-859D-E88AAD2EF81C} = {0BC82695-936F-4686-9CCB-7D8F3C326C50}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD30BF25-78C2-42BB-B669-7D75367144FA}

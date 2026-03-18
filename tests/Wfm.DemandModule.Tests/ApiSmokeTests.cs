@@ -54,6 +54,18 @@ public class ApiSmokeTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
+    public async Task Simulation_Overview_Week_Starts_On_Monday()
+    {
+        var client = _factory.CreateClient();
+        var resp = await client.GetAsync("/api/v1/simulation/overview?date=2026-03-16");
+        resp.EnsureSuccessStatusCode();
+
+        var body = await resp.Content.ReadFromJsonAsync<SimulationOverviewResponse>();
+        Assert.NotNull(body);
+        Assert.Equal(["mån", "tis", "ons", "tors", "fre", "lör", "sön"], body!.periods.week.chart.Select(x => x.label));
+    }
+
+    [Fact]
     public async Task Simulation_Run_Returns_TimeSeries_Totals_And_Summary()
     {
         var client = _factory.CreateClient();
@@ -105,7 +117,7 @@ public class ApiSmokeTests : IClassFixture<WebApplicationFactory<Program>>
 
     private sealed record TokenResponse(string accessToken, DateTime expiresAtUtc);
     private sealed record SimulationOverviewResponse(string date, OverviewStream[] streams, OverviewPeriods periods);
-    private sealed record OverviewPeriods(OverviewPeriod day);
+    private sealed record OverviewPeriods(OverviewPeriod day, OverviewPeriod week);
     private sealed record OverviewPeriod(string key, OverviewChartPoint[] chart, OverviewSuggestion[] suggestions);
     private sealed record OverviewChartPoint(string label, decimal aiDemand);
     private sealed record OverviewSuggestion(int id, string title);
